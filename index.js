@@ -8,23 +8,44 @@ app.use(express.json());
 // Servir arquivos estáticos (como login.html)
 app.use(express.static('public'));
 
-// Simulação de usuários cadastrados
+// Simulando banco de usuários
 const usuarios = [
-  { id: 1, username: 'admin', password: '1234' },
-  { id: 2, username: 'joao', password: 'abcd' }
+  { usuario: 'joao', senha: '123', setor: 'TI', tipoUsuario: 'supervisor' },
+  { usuario: 'maria', senha: 'abc', setor: 'RH', tipoUsuario: 'funcionario' },
+  { usuario: 'jana', senha: '456', setor: 'Marketing', tipoUsuario: 'supervisor' },
+  { usuario: 'paulo', senha: 'xyz', setor: 'Financeiro', tipoUsuario: 'funcionario' }
 ];
 
-// Login
+// Rota de login
 app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const usuario = usuarios.find(u => u.username === username && u.password === password);
-  
-  if (usuario) {
-    res.json({ success: true, userId: usuario.id });
+  const { usuario, senha } = req.body;
+  const user = usuarios.find(u => u.usuario === usuario && u.senha === senha);
+
+  if (user) {
+    res.json({
+      success: true,
+      usuario: user.usuario,
+      setor: user.setor,
+      tipoUsuario: user.tipoUsuario
+    });
   } else {
-    res.json({ success: false });
+    res.json({ success: false, message: 'Usuário ou senha inválidos' });
   }
 });
+app.post('/agendar', (req, res) => {
+    const { usuario, tipoUsuario, setor, sala, inicio, fim } = req.body;
+  
+    if (tipoUsuario !== 'supervisor') {
+      return res.json({ success: false, message: 'Apenas supervisores podem agendar salas.' });
+    }
+  
+    // Aqui você pode salvar ou simular o agendamento
+    console.log('Agendamento recebido:', req.body);
+  
+    res.json({ success: true });
+  });
+  
+
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
