@@ -71,6 +71,7 @@
         sessionStorage.setItem('usuario', data.usuario);
         sessionStorage.setItem('setor', data.setor);
         sessionStorage.setItem('tipoUsuario', data.tipoUsuario);
+        localStorage.setItem('usuario', JSON.stringify(data.usuario));
         window.location.href = '/agendamento.html';
       } else {
         document.getElementById('msg').innerText = '❌ ' + (data.message || 'Login inválido');
