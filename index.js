@@ -24,12 +24,16 @@ app.post('/login', (req, res) => {
   if (user) {
     res.json({
       success: true,
-      usuario: user
+      usuario: user,// Retorna o objeto inteiro do usuário
+      // Newusuario :user.usuario,
+        setor: user.setor,
+        tipoUsuario: user.tipoUsuario  
     });
   } else {
     res.json({ success: false, message: 'Usuário ou senha inválidos' });
   }
 });
+
 
 // Rota de agendamento com verificação de conflito
 app.post('/agendar', (req, res) => {

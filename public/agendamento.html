@@ -39,44 +39,67 @@
     button:hover {
       background: #218838;
     }
+    .voltar {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .voltar:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-    <script>
-        // Pega os dados do login
-        const usuario = sessionStorage.getItem('usuario');
-        const setor = sessionStorage.getItem('setor');
-        const tipoUsuario = sessionStorage.getItem('tipoUsuario');
-      
-        // Se não estiver logado, redireciona
-        if (!usuario || !setor || !tipoUsuario) {
-          window.location.href = '/login.html';
-        }
-      
-        // Quando a página carregar, preenche os campos
-        window.addEventListener('DOMContentLoaded', () => {
-          document.getElementById('usuario').value = usuario;
-          document.getElementById('usuario').readOnly = true;
-      
-          document.getElementById('setor').value = setor;
-          document.getElementById('setor').disabled = true;
-      
-          document.getElementById('tipoUsuario').value = tipoUsuario;
-          document.getElementById('tipoUsuario').disabled = true;
-        });
-      </script>
-      
+  <script>
+    // Pega os dados do login
+    const user = JSON.parse(localStorage.getItem('usuario'));
+    console.log("Usuário logado:", user);
+    const usuario = sessionStorage.getItem('usuario');
+    const setor = sessionStorage.getItem('setor');
+    const tipoUsuario = sessionStorage.getItem('tipoUsuario');
+  
+    // Se não estiver logado, redireciona
+    if (!usuario || !setor || !tipoUsuario) {
+      window.location.href = '/login.html';
+    }
+  
+    // Quando a página carregar, preenche os campos
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('usuario').value = user.usuario;
+      document.getElementById('usuario').readOnly = true; // Impede edição
+
+      document.getElementById('setor').value = setor;
+      document.getElementById('setor').disabled = true; // Impede edição
+
+      document.getElementById('tipoUsuario').value = tipoUsuario;
+      document.getElementById('tipoUsuario').disabled = true; // Impede edição
+    });
+  </script>
+
   <div class="box">
     <h2>Agendar Sala</h2>
     <form id="formAgendamento">
+      <!-- Campo do Usuário (somente leitura) -->
       <input type="text" id="usuario" placeholder="Seu nome (usuário)" required />
+      
+      <!-- <h1 id="mensagem"></h1>
+      <script type="module">
+        import { user } from './index.js';
 
+        document.getElementById('mensagem').textContent = `Bem-vindo, ${user.usuario}`;
+    </script> -->
+
+
+      <!-- Tipo de Usuário (somente leitura) -->
       <select id="tipoUsuario" required>
         <option value="">Tipo de usuário</option>
         <option value="funcionario">Funcionário</option>
         <option value="supervisor">Supervisor</option>
       </select>
 
+      <!-- Setor (somente leitura) -->
       <select id="setor" required>
         <option value="">Selecione seu setor</option>
         <option value="RH">RH</option>
@@ -85,6 +108,7 @@
         <option value="Marketing">Marketing</option>
       </select>
 
+      <!-- Seleção da sala -->
       <select id="sala" required>
         <option value="">Selecione uma sala</option>
         <option value="101">Sala 101</option>
@@ -101,12 +125,13 @@
         <option value="304">Sala 304</option>
       </select>
 
+      <!-- Horário de início e fim -->
       <input type="datetime-local" id="inicio" required />
       <input type="datetime-local" id="fim" required />
       <button type="submit">Agendar</button>
       
+      <!-- Link para ir para a agenda -->
       <a href="agenda.html" class="voltar">Ir para a Agenda</a>
-
     </form>
     <div id="msg" style="margin-top: 10px;"></div>
   </div>
