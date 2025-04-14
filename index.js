@@ -25,9 +25,8 @@ app.post('/login', (req, res) => {
     res.json({
       success: true,
       usuario: user,// Retorna o objeto inteiro do usuário
-      // Newusuario :user.usuario,
-        setor: user.setor,
-        tipoUsuario: user.tipoUsuario  
+      setor: user.setor,
+      tipoUsuario: user.tipoUsuario  
     });
   } else {
     res.json({ success: false, message: 'Usuário ou senha inválidos' });

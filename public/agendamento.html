@@ -54,28 +54,27 @@
 <body>
   <script>
     // Pega os dados do login
-    const user = JSON.parse(localStorage.getItem('usuario'));
-    console.log("Usuário logado:", user);
-    const usuario = sessionStorage.getItem('usuario');
-    const setor = sessionStorage.getItem('setor');
-    const tipoUsuario = sessionStorage.getItem('tipoUsuario');
+    try{
+      const user = JSON.parse(sessionStorage.getItem('usuario'));
+      console.log("Usuário logado:", user.usuario);
+
+      // Quando a página carregar, preenche os campos
+      window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('usuario').value = user.usuario;
+        document.getElementById('usuario').readOnly = true; // Impede edição
   
-    // Se não estiver logado, redireciona
-    if (!usuario || !setor || !tipoUsuario) {
+        document.getElementById('setor').value = user.setor;
+        document.getElementById('setor').disabled = true; // Impede edição
+  
+        document.getElementById('tipoUsuario').value = user.tipoUsuario;
+        document.getElementById('tipoUsuario').disabled = true; // Impede edição
+      });
+    }catch(err){
+      // Se não estiver logado, redireciona
       window.location.href = '/login.html';
     }
+
   
-    // Quando a página carregar, preenche os campos
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('usuario').value = user.usuario;
-      document.getElementById('usuario').readOnly = true; // Impede edição
-
-      document.getElementById('setor').value = setor;
-      document.getElementById('setor').disabled = true; // Impede edição
-
-      document.getElementById('tipoUsuario').value = tipoUsuario;
-      document.getElementById('tipoUsuario').disabled = true; // Impede edição
-    });
   </script>
 
   <div class="box">

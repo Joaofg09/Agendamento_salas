@@ -67,17 +67,12 @@
       const data = await res.json();
 
       if (data.success) {
-        // Salva os dados no navegador
-        // sessionStorage.setItem('usuario', data.usuario);
-        // sessionStorage.setItem('setor', data.setor);
-        // sessionStorage.setItem('tipoUsuario', data.tipoUsuario);
-        // localStorage.setItem('usuario', JSON.stringify(data.usuario));
         const usuarioCompleto = {
-  usuario: data.usuario.usuario,
-  setor: data.usuario.setor,
-  tipoUsuario: data.usuario.tipoUsuario
-};
-localStorage.setItem('usuario', JSON.stringify(usuarioCompleto));
+          usuario: data.usuario.usuario,
+          setor: data.usuario.setor,
+          tipoUsuario: data.usuario.tipoUsuario
+        };
+        sessionStorage.setItem('usuario', JSON.stringify(usuarioCompleto));
 
         window.location.href = '/agendamento.html';
       } else {
