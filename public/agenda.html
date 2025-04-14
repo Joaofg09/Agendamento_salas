@@ -103,41 +103,46 @@
   <a href="agendamento.html" class="voltar">← Voltar</a>
 
   <script>
-    const user = JSON.parse(localStorage.getItem('usuario'));
-    console.log("Usuário logado:", user);
-    const isSupervisor = user?.tipoUsuario === 'supervisor';
-
-    function carregarAgendamentos() {
-      const setor = document.getElementById('filtroSetor').value;
-      const sala = document.getElementById('filtroSala').value;
-      const tbody = document.querySelector('#tabela-agendamentos tbody');
-      tbody.innerHTML = '';
-
-      fetch('/agendamentos')
-        .then(res => res.json())
-        .then(agendamentos => {
-          const filtrados = agendamentos.filter(ag => {
-            return (!setor || ag.setor === setor) && (!sala || ag.sala == sala);
+    try{
+      const user = JSON.parse(sessionStorage.getItem('usuario'));
+      console.log("Usuário logado:", user.usuario);
+      const isSupervisor = user?.tipoUsuario === 'supervisor';
+  
+      function carregarAgendamentos() {
+        const setor = document.getElementById('filtroSetor').value;
+        const sala = document.getElementById('filtroSala').value;
+        const tbody = document.querySelector('#tabela-agendamentos tbody');
+        tbody.innerHTML = '';
+  
+        fetch('/agendamentos')
+          .then(res => res.json())
+          .then(agendamentos => {
+            const filtrados = agendamentos.filter(ag => {
+              return (!setor || ag.setor === setor) && (!sala || ag.sala == sala);
+            });
+  
+            filtrados.forEach((ag, index) => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${ag.usuario}</td>
+                <td>${ag.setor}</td>
+                <td>${ag.sala}</td>
+                <td>${formatarData(ag.inicio)}</td>
+                <td>${formatarData(ag.fim)}</td>
+                <td>
+    ${isSupervisor && ag.setor === user.setor
+      ? `<button class="excluir" onclick="excluirAgendamento(${index})">Excluir</button>`
+      : ''}
+  </td>
+  
+              `;
+              tbody.appendChild(tr);
+            });
           });
-
-          filtrados.forEach((ag, index) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${ag.usuario}</td>
-              <td>${ag.setor}</td>
-              <td>${ag.sala}</td>
-              <td>${formatarData(ag.inicio)}</td>
-              <td>${formatarData(ag.fim)}</td>
-              <td>
-  ${isSupervisor && ag.setor === user.setor
-    ? `<button class="excluir" onclick="excluirAgendamento(${index})">Excluir</button>`
-    : ''}
-</td>
-
-            `;
-            tbody.appendChild(tr);
-          });
-        });
+      }
+    }catch(err){
+      // Se não estiver logado, redireciona
+      window.location.href = '/login.html';
     }
 
     function excluirAgendamento(index) {
