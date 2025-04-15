@@ -24,15 +24,14 @@ app.post('/login', (req, res) => {
   if (user) {
     res.json({
       success: true,
-      usuario: user,// Retorna o objeto inteiro do usuário
+      usuario: user,
       setor: user.setor,
-      tipoUsuario: user.tipoUsuario  
+      tipoUsuario: user.tipoUsuario
     });
   } else {
     res.json({ success: false, message: 'Usuário ou senha inválidos' });
   }
 });
-
 
 // Rota de agendamento com verificação de conflito
 app.post('/agendar', (req, res) => {
@@ -53,7 +52,6 @@ app.post('/agendar', (req, res) => {
     console.error('Erro ao ler agendamentos:', err);
   }
 
-  // Verificação simples de conflito de horário e sala
   const conflito = agendamentos.find(ag => {
     return (
       ag.sala === sala &&
@@ -89,6 +87,7 @@ app.get('/agendamentos', (req, res) => {
   }
 });
 
+// Exclusão de agendamento
 app.delete('/excluir/:index', (req, res) => {
   const index = parseInt(req.params.index);
   const { setor } = req.body;
@@ -102,7 +101,10 @@ app.delete('/excluir/:index', (req, res) => {
 
       // Verifica se o setor do agendamento bate com o do supervisor
       if (agendamento.setor !== setor) {
-        return res.status(403).json({ success: false, message: 'Você só pode excluir agendamentos do seu setor.' });
+        return res.status(403).json({
+          success: false,
+          message: 'Você só pode excluir agendamentos do seu setor.'
+        });
       }
 
       agendamentos.splice(index, 1);
@@ -115,8 +117,6 @@ app.delete('/excluir/:index', (req, res) => {
     res.status(500).json({ success: false, message: 'Erro ao excluir agendamento' });
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

@@ -103,24 +103,24 @@
   <a href="agendamento.html" class="voltar">← Voltar</a>
 
   <script>
-    try{
+    try {
       const user = JSON.parse(sessionStorage.getItem('usuario'));
-      console.log("Usuário logado:", user.usuario);
+      if (!user) throw new Error("Não autenticado");
       const isSupervisor = user?.tipoUsuario === 'supervisor';
-  
+
       function carregarAgendamentos() {
         const setor = document.getElementById('filtroSetor').value;
         const sala = document.getElementById('filtroSala').value;
         const tbody = document.querySelector('#tabela-agendamentos tbody');
         tbody.innerHTML = '';
-  
+
         fetch('/agendamentos')
           .then(res => res.json())
           .then(agendamentos => {
             const filtrados = agendamentos.filter(ag => {
               return (!setor || ag.setor === setor) && (!sala || ag.sala == sala);
             });
-  
+
             filtrados.forEach((ag, index) => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
@@ -130,50 +130,46 @@
                 <td>${formatarData(ag.inicio)}</td>
                 <td>${formatarData(ag.fim)}</td>
                 <td>
-    ${isSupervisor && ag.setor === user.setor
-      ? `<button class="excluir" onclick="excluirAgendamento(${index})">Excluir</button>`
-      : ''}
-  </td>
-  
+                  ${isSupervisor && ag.setor === user.setor
+                    ? `<button class="excluir" onclick="excluirAgendamento(${index})">Excluir</button>`
+                    : ''}
+                </td>
               `;
               tbody.appendChild(tr);
             });
           });
       }
-    }catch(err){
-      // Se não estiver logado, redireciona
+
+      function excluirAgendamento(index) {
+        if (!confirm('Tem certeza que deseja excluir este agendamento?')) return;
+
+        const setor = user?.setor;
+
+        fetch(`/excluir/${index}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ setor })
+        })
+        .then(res => res.json())
+        .then(resposta => {
+          if (resposta.success) {
+            alert('Agendamento excluído com sucesso!');
+            carregarAgendamentos();
+          } else {
+            alert(resposta.message || 'Erro ao excluir agendamento');
+          }
+        });
+      }
+
+      function formatarData(dataStr) {
+        const data = new Date(dataStr);
+        return data.toLocaleString('pt-BR');
+      }
+
+      carregarAgendamentos();
+    } catch (err) {
       window.location.href = '/login.html';
     }
-
-    function excluirAgendamento(index) {
-      if (!confirm('Tem certeza que deseja excluir este agendamento?')) return;
-
-      const setor = user?.setor;
-
-      fetch(`/excluir/${index}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ setor })
-      })
-      .then(res => res.json())
-      .then(resposta => {
-        if (resposta.success) {
-          alert('Agendamento excluído com sucesso!');
-          carregarAgendamentos();
-        } else {
-          alert(resposta.message || 'Erro ao excluir agendamento');
-        }
-      });
-    }
-
-    function formatarData(dataStr) {
-      const data = new Date(dataStr);
-      return data.toLocaleString('pt-BR');
-    }
-
-    carregarAgendamentos();
   </script>
 </body>
 </html>
