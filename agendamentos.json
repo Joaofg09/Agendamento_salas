@@ -1,19 +1,5 @@
 [
   {
-    "usuario": "joao",
-    "setor": "TI",
-    "sala": "201",
-    "inicio": "2025-04-13T15:14",
-    "fim": "2025-04-13T17:15"
-  },
-  {
-    "usuario": "jana",
-    "setor": "Marketing",
-    "sala": "201",
-    "inicio": "2025-04-14T15:15",
-    "fim": "2025-04-14T16:15"
-  },
-  {
     "usuario": "jana",
     "setor": "Marketing",
     "sala": "201",
@@ -21,17 +7,17 @@
     "fim": "2025-04-25T17:29"
   },
   {
-    "usuario": "jana",
-    "setor": "Marketing",
-    "sala": "301",
-    "inicio": "2025-04-13T15:32",
-    "fim": "2025-04-13T16:33"
-  },
-  {
     "usuario": "joao",
     "setor": "TI",
     "sala": "101",
     "inicio": "2025-04-14T17:33",
     "fim": "2025-04-14T18:34"
+  },
+  {
+    "usuario": "jana",
+    "setor": "Marketing",
+    "sala": "201",
+    "inicio": "2025-04-15T15:37",
+    "fim": "2025-04-15T16:25"
   }
 ]
